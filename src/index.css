@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 自訂 DatePicker 樣式 */
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker__input-container input {
+  width: 100%;
+}
+
+/* 確認對話框樣式 */
+.react-confirm-alert-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.react-confirm-alert-body {
+  font-family: inherit;
+  padding: 24px;
+  border-radius: 16px;
+}
+
+.react-confirm-alert-body h1 {
+  font-weight: 900;
+  font-size: 1.25rem;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.react-confirm-alert-button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.react-confirm-alert-button-group button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.react-confirm-alert-button-group button:first-child {
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+.react-confirm-alert-button-group button:first-child:hover {
+  background-color: #cbd5e1;
+}
+
+.react-confirm-alert-button-group button:last-child {
+  background-color: #dc2626;
+  color: white;
+}
+
+.react-confirm-alert-button-group button:last-child:hover {
+  background-color: #b91c1c;
+}

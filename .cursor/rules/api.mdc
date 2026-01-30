@@ -1,0 +1,13 @@
+---
+description: 後端 API 與賽事 CRUD 慣例
+globs: "**/api/**/*.{ts,js}"
+alwaysApply: false
+---
+
+# API 慣例
+
+- **GET /api/events**：列表，支援 query `isDomestic`、`fromDate`、`toDate`、`location`、`keyword`（賽事名稱）。
+- **POST /api/events**、**PUT /api/events/:id**、**DELETE /api/events/:id**：需驗證後台登入（如 JWT/session）。
+- 回傳格式一致：成功用 `{ data }` 或 `{ data, message }`，錯誤用適當 HTTP 狀態碼與錯誤訊息。
+- 賽事欄位：`name`、`eventDate`、`location`、`isDomestic`；選用 `id`、`createdAt`、`updatedAt`。
+- 賽事資料從 **Firebase Firestore** 讀寫；API 層使用 Firebase Admin SDK 或 Firestore REST/Client SDK，依架構選擇。

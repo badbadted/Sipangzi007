@@ -1,0 +1,20 @@
+---
+description: 滑步車賽事資訊系統 - 專案概述與通用慣例
+alwaysApply: true
+---
+
+# 專案概述
+
+- **專案名稱**：滑步車賽事資訊系統（Sipangzi007）
+- **功能**：前台展示國內/國外滑步車賽事（賽事名稱、比賽日期、地點），可篩選；後台 CMS 可新增/編輯/刪除賽事。
+- **資料庫**：使用 **Firebase**（建議 Firestore 存賽事文件；認證可用 Firebase Auth）。
+
+# 通用慣例
+
+- 回應與註解使用 **繁體中文**。
+- 程式碼識別子、變數、API 路徑可用英文；使用者可見文字（UI、錯誤訊息）使用繁體中文。
+- 前後端介面欄位對應：
+  - 賽事名稱 → `name`
+  - 比賽日期 → `eventDate`（ISO date 或 YYYY-MM-DD）
+  - 地點 → `location`
+  - 國內/國外 → `isDomestic`（boolean，true=國內、false=國外）

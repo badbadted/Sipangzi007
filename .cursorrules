@@ -1,0 +1,60 @@
+你是一位滑步車賽事資訊系統開發專家。
+
+    # 專案語境
+    我們正在開發「滑步車賽事資訊系統」，風格為滑步車賽事資訊系統。
+
+# 技術偏好
+- 使用 TypeScript 確保型別安全。
+- 圖片路徑：預設放在 /public/images/ 資料夾下。
+- 使用 Tailwind CSS 進行樣式設計。
+- 使用 Firebase 進行資料庫管理。
+
+# 目錄結構（大方向）
+- `src/`：主要程式碼
+  - `components/`：共用 UI 元件（按功能或頁面分子資料夾）。
+  - `pages/`：頁面元件（前台賽事列表、後台管理等）。
+  - `hooks/`：自訂 hooks（資料、篩選、表單等）。
+  - `lib/`：Firebase 初始化、工具函式、API 封裝。
+  - `types/`：TypeScript 型別（賽事、API 回傳等）。
+  - `routes/`：React Router 設定（若獨立成檔）。
+  - `styles/`：全域或共用樣式（若需額外 CSS）。
+- `public/`：靜態資源；圖片放 `public/images/`。
+- 環境變數：Firebase 等設定放 `.env`，勿提交 `.env.local` 等含密鑰的檔案。
+
+# 設計風格（UI 規範）
+- 中性色：統一使用 Tailwind `slate-*` 色系，不使用 `gray-*`。
+- 主色：主要操作按鈕使用 `blue-600` / `blue-700`，focus 使用 `ring-blue-500`。
+- 狀態色：
+  - 成功／完成使用 `green-*`。
+  - 檢錄使用 `purple-*`。
+  - 終點抄錄使用 `orange-*`。
+  - 頒獎使用 `yellow-*`。
+  - 刪除／危險使用 `red-*`。
+- 圓角規則：
+  - 大卡片／主要區塊：`rounded-2xl`
+  - 一般卡片：`rounded-xl`
+  - 按鈕與輸入框：`rounded-lg`
+  - 小徽章／圓形圖示：`rounded-full`
+- 文字層級：
+  - 頁面與模組標題使用 `font-black`。
+  - 按鈕與重要標籤使用 `font-bold`。
+  - 次要說明與空狀態文字使用 `text-slate-500` 或 `text-slate-400`。
+- 表單元件：
+  - 輸入框與 textarea 使用 `border border-slate-300 rounded-lg`。
+  - 焦點態統一使用 `focus:outline-none focus:ring-2 focus:ring-blue-500`。
+
+# 程式碼風格
+- 使用 React 19 開發。
+- 使用 Vite 進行建置。
+- 使用 Lucide React 進行圖示。   
+- 使用 React Hook Form 進行表單管理。
+- 使用 React Query 進行資料管理。
+- 使用 React Router 進行路由管理。
+- 使用 React Toastify 進行提示管理。
+- 使用 React Icons 進行圖示管理。
+- 使用 React Datepicker 進行日期選擇管理。
+- 使用 React Select 進行選擇管理。
+- 使用 React Table 進行表格管理。
+- 使用 React Modal 進行彈窗管理。
+- 使用 React Tooltip 進行提示管理。
+- 使用 React Confirm Dialog 進行確認管理。

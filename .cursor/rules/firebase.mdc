@@ -1,0 +1,13 @@
+---
+description: Firebase（Firestore / Auth）使用慣例
+globs: "**/*.{ts,js,tsx,jsx}"
+alwaysApply: false
+---
+
+# Firebase 慣例
+
+- **Firestore**：賽事集合建議命名為 `events`；文件欄位與 API 一致：`name`、`eventDate`、`location`、`isDomestic`，選用 `createdAt`、`updatedAt`。
+- **查詢**：列表與篩選使用 Firestore `where`、`orderBy`；日期區間用 `eventDate >= fromDate`、`eventDate <= toDate`；賽事名稱關鍵字可用 `orderBy('name').startAt(keyword).endAt(keyword + '\uf8ff')` 或後端過濾。
+- **環境變數**：Firebase 設定（API key、projectId、私鑰等）放在 `.env`，勿提交至版控；使用 `firebase-admin` 時以服務帳號或 Application Default Credentials 初始化。
+- **安全**：後台寫入（新增/編輯/刪除）需驗證身分（Firebase Auth 或自訂 JWT）；Firestore Security Rules 依「僅後台已登入可寫、前台可讀」原則撰寫。
+- **前端**：若直接從前端讀 Firestore，使用 Firebase Client SDK；若經由後端 API，則前端只呼叫 API、不直接連 Firestore。
