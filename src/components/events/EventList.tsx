@@ -11,6 +11,22 @@ function getRegistrationStatus(event: Event, today: string): 'open' | 'closed' |
   return today <= event.registrationDeadline ? 'open' : 'closed';
 }
 
+// 月份底色對應表（6 色循環）
+const MONTH_BG_COLORS = [
+  'bg-slate-50',   // 1月, 7月
+  'bg-blue-50',    // 2月, 8月
+  'bg-amber-50',   // 3月, 9月
+  'bg-green-50',   // 4月, 10月
+  'bg-violet-50',  // 5月, 11月
+  'bg-rose-50',    // 6月, 12月
+];
+
+// 根據日期取得月份底色 class
+function getMonthBgColor(eventDate: string): string {
+  const month = parseInt(eventDate.slice(5, 7), 10); // 取 MM
+  return MONTH_BG_COLORS[(month - 1) % 6];
+}
+
 interface EventListProps {
   events: Event[];
 }
@@ -24,13 +40,13 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
   return (
     <div
       ref={ref}
-      className="max-h-[60vh] overflow-auto rounded-xl border border-slate-200"
+      className="min-h-[70vh] max-h-[calc(100vh-12rem)] overflow-auto rounded-xl border border-slate-200"
     >
       <div className="bg-white rounded-xl overflow-hidden">
       {/* 桌面版：表格 */}
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-slate-50 border-b border-slate-200">
+          <thead className="bg-slate-100 border-b border-slate-200 sticky top-0">
             <tr>
               <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">
                 <div className="flex items-center gap-2">
@@ -39,10 +55,13 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                 </div>
               </th>
               <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">
-                賽事名稱
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-slate-500" />
+                  地點
+                </div>
               </th>
               <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">
-                地點
+                賽事名稱
               </th>
               <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">
                 類型
@@ -56,16 +75,15 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
             {events.map((event) => {
               const isPast = event.eventDate < today;
               const regStatus = getRegistrationStatus(event, today);
+              const monthBg = getMonthBgColor(event.eventDate);
               return (
                 <tr
                   key={event.id}
                   data-event-id={event.id}
                   data-event-date={event.eventDate}
-                  className={`transition-colors ${
-                    isPast
-                      ? 'bg-slate-50 text-slate-500 hover:bg-slate-100'
-                      : 'hover:bg-slate-50'
-                  }`}
+                  className={`transition-colors ${monthBg} ${
+                    isPast ? 'opacity-70' : ''
+                  } hover:brightness-95`}
                 >
                   <td className="px-4 py-3">
                     <span
@@ -77,21 +95,16 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                     </span>
                   </td>
                   <td className="px-4 py-3">
+                    <span className={isPast ? 'text-slate-500' : 'text-slate-600'}>
+                      {event.location}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
                     <span
                       className={isPast ? 'text-slate-500 font-bold' : 'font-bold text-amber-600'}
                     >
                       {event.name}
                     </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div
-                      className={`flex items-center gap-1.5 ${
-                        isPast ? 'text-slate-500' : 'text-slate-600'
-                      }`}
-                    >
-                      <MapPin className="w-4 h-4 text-slate-400 flex-shrink-0" />
-                      <span>{event.location}</span>
-                    </div>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap items-center gap-1.5">
@@ -136,17 +149,17 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
         {events.map((event) => {
           const isPast = event.eventDate < today;
           const regStatus = getRegistrationStatus(event, today);
+          const monthBg = getMonthBgColor(event.eventDate);
           return (
             <div
               key={event.id}
               data-event-id={event.id}
               data-event-date={event.eventDate}
-              className={`px-4 py-3 transition-colors ${
-                isPast
-                  ? 'bg-slate-50 text-slate-500 hover:bg-slate-100'
-                  : 'hover:bg-slate-50'
+              className={`px-4 py-3 transition-colors ${monthBg} ${
+                isPast ? 'opacity-70' : ''
               }`}
             >
+              {/* 第一列：日期 + 地點 */}
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-blue-600" />
@@ -156,6 +169,19 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                     {event.eventDate}
                   </span>
                 </div>
+                <div className="flex items-center gap-1.5 text-sm text-slate-500">
+                  <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                  <span>{event.location}</span>
+                </div>
+              </div>
+              {/* 第二列：賽事名稱 */}
+              <p
+                className={`font-bold mb-1 ${isPast ? 'text-slate-500' : 'text-amber-600'}`}
+              >
+                {event.name}
+              </p>
+              {/* 第三列：類型 + 報名 */}
+              <div className="flex items-center justify-between">
                 <div className="flex flex-wrap items-center gap-1.5">
                   <Badge variant={event.isDomestic ? 'domestic' : 'international'}>
                     {event.isDomestic ? '國內' : '國外'}
@@ -165,17 +191,6 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                       比賽完成
                     </span>
                   )}
-                </div>
-              </div>
-              <p
-                className={`font-bold mb-1 ${isPast ? 'text-slate-500' : 'text-amber-600'}`}
-              >
-                {event.name}
-              </p>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-sm text-slate-500">
-                  <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                  <span>{event.location}</span>
                 </div>
                 {regStatus === 'open' && (
                   <a
