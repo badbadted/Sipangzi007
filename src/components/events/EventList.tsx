@@ -51,8 +51,11 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
               <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-blue-600" />
-                  比賽日期
+                  日期
                 </div>
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">
+                報名
               </th>
               <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">
                 賽事名稱
@@ -65,9 +68,6 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
               </th>
               <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">
                 類型
-              </th>
-              <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">
-                報名
               </th>
             </tr>
           </thead>
@@ -91,8 +91,27 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                         isPast ? 'text-slate-500' : 'text-slate-900'
                       }`}
                     >
-                      {event.eventDate}
+                      {event.eventDate.slice(5)}
                     </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    {regStatus === 'open' && (
+                      <a
+                        href={event.registrationUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-sm font-bold text-green-700 hover:text-green-800 hover:underline"
+                      >
+                        報名中
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                    {regStatus === 'closed' && (
+                      <span className="text-sm font-medium text-slate-500">報名截止</span>
+                    )}
+                    {regStatus === 'none' && (
+                      <span className="text-sm text-slate-400">—</span>
+                    )}
                   </td>
                   <td className="px-4 py-3">
                     <span
@@ -122,25 +141,6 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                       )}
                     </div>
                   </td>
-                  <td className="px-4 py-3">
-                    {regStatus === 'open' && (
-                      <a
-                        href={event.registrationUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-sm font-bold text-green-700 hover:text-green-800 hover:underline"
-                      >
-                        報名中
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </a>
-                    )}
-                    {regStatus === 'closed' && (
-                      <span className="text-sm font-medium text-slate-500">報名截止</span>
-                    )}
-                    {regStatus === 'none' && (
-                      <span className="text-sm text-slate-400">—</span>
-                    )}
-                  </td>
                 </tr>
               );
             })}
@@ -163,14 +163,30 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                 isPast ? 'opacity-70' : ''
               }`}
             >
-              {/* 第一列：日期 */}
-              <div className="flex items-center gap-2 mb-1">
-                <Calendar className="w-4 h-4 text-blue-600" />
-                <span
-                  className={`font-bold ${isPast ? 'text-slate-500' : 'text-slate-900'}`}
-                >
-                  {event.eventDate}
-                </span>
+              {/* 第一列：日期 + 報名狀態 */}
+              <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-blue-600" />
+                  <span
+                    className={`font-bold ${isPast ? 'text-slate-500' : 'text-slate-900'}`}
+                  >
+                    {event.eventDate.slice(5)}
+                  </span>
+                </div>
+                {regStatus === 'open' && (
+                  <a
+                    href={event.registrationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm font-bold text-green-700 hover:text-green-800"
+                  >
+                    報名中
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                )}
+                {regStatus === 'closed' && (
+                  <span className="text-sm font-medium text-slate-500">報名截止</span>
+                )}
               </div>
               {/* 第二列：賽事名稱 + 地點 */}
               <div className="flex items-center gap-2 mb-1 flex-wrap">
@@ -190,31 +206,15 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                   </span>
                 </div>
               </div>
-              {/* 第三列：類型 + 報名 */}
-              <div className="flex items-center justify-between">
-                <div className="flex flex-wrap items-center gap-1.5">
-                  <Badge variant={event.isDomestic ? 'domestic' : 'international'}>
-                    {event.isDomestic ? '國內' : '國外'}
-                  </Badge>
-                  {isPast && (
-                    <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700">
-                      比賽完成
-                    </span>
-                  )}
-                </div>
-                {regStatus === 'open' && (
-                  <a
-                    href={event.registrationUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm font-bold text-green-700 hover:text-green-800"
-                  >
-                    報名中
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                )}
-                {regStatus === 'closed' && (
-                  <span className="text-sm font-medium text-slate-500">報名截止</span>
+              {/* 第三列：類型 */}
+              <div className="flex flex-wrap items-center gap-1.5">
+                <Badge variant={event.isDomestic ? 'domestic' : 'international'}>
+                  {event.isDomestic ? '國內' : '國外'}
+                </Badge>
+                {isPast && (
+                  <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700">
+                    比賽完成
+                  </span>
                 )}
               </div>
             </div>

@@ -35,21 +35,29 @@ export function EventsPage() {
     [events, today]
   );
 
-  // 已完成賽事的年份列表（由大到小）
-  const completedYears = useMemo(() => {
-    const years = new Set(completedEvents.map((e) => parseInt(e.eventDate.slice(0, 4), 10)));
-    return Array.from(years).sort((a, b) => b - a);
-  }, [completedEvents]);
+  // 當前頁籤的賽事來源
+  const tabEvents = activeTab === 'upcoming' ? upcomingEvents : completedEvents;
 
-  // 已完成賽事依年份篩選
-  const filteredCompletedEvents = useMemo(() => {
-    if (selectedYear === null) return completedEvents;
-    return completedEvents.filter(
+  // 從當前頁籤賽事取得年份列表（由大到小）
+  const availableYears = useMemo(() => {
+    const years = new Set(tabEvents.map((e) => parseInt(e.eventDate.slice(0, 4), 10)));
+    return Array.from(years).sort((a, b) => b - a);
+  }, [tabEvents]);
+
+  // 切換頁籤時重設年份
+  useEffect(() => {
+    setSelectedYear(null);
+  }, [activeTab]);
+
+  // 依年份篩選
+  const filteredEvents = useMemo(() => {
+    if (selectedYear === null) return tabEvents;
+    return tabEvents.filter(
       (e) => parseInt(e.eventDate.slice(0, 4), 10) === selectedYear
     );
-  }, [completedEvents, selectedYear]);
+  }, [tabEvents, selectedYear]);
 
-  const displayedEvents = activeTab === 'upcoming' ? upcomingEvents : filteredCompletedEvents;
+  const displayedEvents = filteredEvents;
 
   // 點擊外側關閉 popover
   useEffect(() => {
@@ -167,8 +175,8 @@ export function EventsPage() {
               )}
             </button>
           </div>
-          {/* 年度切換按鈕（已完成頁籤時顯示） */}
-          {activeTab === 'completed' && completedYears.length > 0 && (
+          {/* 年度切換按鈕 */}
+          {availableYears.length > 0 && (
             <div className="flex gap-1 bg-slate-100 rounded-lg p-1 w-fit">
               <button
                 type="button"
@@ -181,7 +189,7 @@ export function EventsPage() {
               >
                 全部
               </button>
-              {completedYears.map((year) => (
+              {availableYears.map((year) => (
                 <button
                   key={year}
                   type="button"
@@ -216,10 +224,10 @@ export function EventsPage() {
         <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center">
           <Calendar className="w-12 h-12 text-slate-300 mx-auto mb-4" />
           <p className="text-slate-500">
-            {activeTab === 'upcoming'
-              ? '目前沒有未完成的賽事'
-              : selectedYear
-                ? `${selectedYear} 年沒有已完成的賽事`
+            {selectedYear
+              ? `${selectedYear} 年沒有${activeTab === 'upcoming' ? '未完成' : '已完成'}的賽事`
+              : activeTab === 'upcoming'
+                ? '目前沒有未完成的賽事'
                 : '目前沒有已完成的賽事'}
           </p>
         </div>
