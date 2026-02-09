@@ -55,13 +55,13 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                 </div>
               </th>
               <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">
+                賽事名稱
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-slate-500" />
                   地點
                 </div>
-              </th>
-              <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">
-                賽事名稱
               </th>
               <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">
                 類型
@@ -96,18 +96,18 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                   </td>
                   <td className="px-4 py-3">
                     <span
-                      className={isPast && !event.locationColor ? 'text-slate-500' : 'text-slate-600'}
-                      style={event.locationColor ? { color: event.locationColor } : undefined}
+                      className={`font-bold ${isPast && !event.nameColor ? 'text-slate-500' : !event.nameColor ? 'text-black' : ''}`}
+                      style={event.nameColor ? { color: event.nameColor } : undefined}
                     >
-                      {event.location}
+                      {event.name}
                     </span>
                   </td>
                   <td className="px-4 py-3">
                     <span
-                      className={`font-bold ${isPast && !event.nameColor ? 'text-slate-500' : !event.nameColor ? 'text-amber-600' : ''}`}
-                      style={event.nameColor ? { color: event.nameColor } : undefined}
+                      className={isPast && !event.locationColor ? 'text-slate-500' : !event.locationColor ? 'text-black' : ''}
+                      style={event.locationColor ? { color: event.locationColor } : undefined}
                     >
-                      {event.name}
+                      {event.location}
                     </span>
                   </td>
                   <td className="px-4 py-3">
@@ -163,32 +163,33 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                 isPast ? 'opacity-70' : ''
               }`}
             >
-              {/* 第一列：日期 + 地點 */}
-              <div className="flex items-center justify-between mb-1">
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-blue-600" />
-                  <span
-                    className={`font-bold ${isPast ? 'text-slate-500' : 'text-slate-900'}`}
-                  >
-                    {event.eventDate}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5 text-sm text-slate-500">
+              {/* 第一列：日期 */}
+              <div className="flex items-center gap-2 mb-1">
+                <Calendar className="w-4 h-4 text-blue-600" />
+                <span
+                  className={`font-bold ${isPast ? 'text-slate-500' : 'text-slate-900'}`}
+                >
+                  {event.eventDate}
+                </span>
+              </div>
+              {/* 第二列：賽事名稱 + 地點 */}
+              <div className="flex items-center gap-2 mb-1 flex-wrap">
+                <span
+                  className={`font-bold ${isPast && !event.nameColor ? 'text-slate-500' : !event.nameColor ? 'text-black' : ''}`}
+                  style={event.nameColor ? { color: event.nameColor } : undefined}
+                >
+                  {event.name}
+                </span>
+                <div className="flex items-center gap-1 text-sm">
                   <MapPin className="w-3.5 h-3.5 text-slate-400" />
                   <span
+                    className={isPast && !event.locationColor ? 'text-slate-500' : !event.locationColor ? 'text-black' : ''}
                     style={event.locationColor ? { color: event.locationColor } : undefined}
                   >
                     {event.location}
                   </span>
                 </div>
               </div>
-              {/* 第二列：賽事名稱 */}
-              <p
-                className={`font-bold mb-1 ${isPast && !event.nameColor ? 'text-slate-500' : !event.nameColor ? 'text-amber-600' : ''}`}
-                style={event.nameColor ? { color: event.nameColor } : undefined}
-              >
-                {event.name}
-              </p>
               {/* 第三列：類型 + 報名 */}
               <div className="flex items-center justify-between">
                 <div className="flex flex-wrap items-center gap-1.5">
