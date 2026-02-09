@@ -98,10 +98,10 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                       </a>
                     )}
                     {regStatus === 'closed' && (
-                      <span className="text-sm font-medium text-slate-500">報名截止</span>
+                      <span className="text-sm font-bold text-red-600">報名截止</span>
                     )}
                     {regStatus === 'none' && (
-                      <span className="text-sm text-slate-400">—</span>
+                      <span className="text-sm font-medium text-black">未開放</span>
                     )}
                   </td>
                   <td className="px-4 py-3">
@@ -177,7 +177,10 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                   </a>
                 )}
                 {regStatus === 'closed' && (
-                  <span className="text-sm font-medium text-slate-500">報名截止</span>
+                  <span className="text-sm font-bold text-red-600">報名截止</span>
+                )}
+                {regStatus === 'none' && (
+                  <span className="text-sm font-medium text-black">未開放</span>
                 )}
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-blue-600" />
