@@ -49,13 +49,13 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
           <thead className="bg-slate-100 border-b border-slate-200 sticky top-0">
             <tr>
               <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">
+                報名
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-blue-600" />
                   日期
                 </div>
-              </th>
-              <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">
-                報名
               </th>
               <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">
                 賽事名稱
@@ -86,15 +86,6 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                   } hover:brightness-95`}
                 >
                   <td className="px-4 py-3">
-                    <span
-                      className={`font-bold text-base ${
-                        isPast ? 'text-slate-500' : 'text-slate-900'
-                      }`}
-                    >
-                      {event.eventDate.slice(5)}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
                     {regStatus === 'open' && (
                       <a
                         href={event.registrationUrl}
@@ -112,6 +103,15 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                     {regStatus === 'none' && (
                       <span className="text-sm text-slate-400">—</span>
                     )}
+                  </td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={`font-bold text-base ${
+                        isPast ? 'text-slate-500' : 'text-slate-900'
+                      }`}
+                    >
+                      {event.eventDate.slice(5)}
+                    </span>
                   </td>
                   <td className="px-4 py-3">
                     <span
@@ -163,16 +163,8 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                 isPast ? 'opacity-70' : ''
               }`}
             >
-              {/* 第一列：日期 + 報名狀態 */}
-              <div className="flex items-center justify-between mb-1">
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-blue-600" />
-                  <span
-                    className={`font-bold ${isPast ? 'text-slate-500' : 'text-slate-900'}`}
-                  >
-                    {event.eventDate.slice(5)}
-                  </span>
-                </div>
+              {/* 第一列：報名狀態 + 日期 */}
+              <div className="flex items-center gap-3 mb-1">
                 {regStatus === 'open' && (
                   <a
                     href={event.registrationUrl}
@@ -187,6 +179,14 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                 {regStatus === 'closed' && (
                   <span className="text-sm font-medium text-slate-500">報名截止</span>
                 )}
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-blue-600" />
+                  <span
+                    className={`font-bold ${isPast ? 'text-slate-500' : 'text-slate-900'}`}
+                  >
+                    {event.eventDate.slice(5)}
+                  </span>
+                </div>
               </div>
               {/* 第二列：賽事名稱 + 地點 */}
               <div className="flex items-center gap-2 mb-1 flex-wrap">

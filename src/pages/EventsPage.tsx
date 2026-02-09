@@ -19,17 +19,10 @@ export function EventsPage() {
 
   // 依今日日期分割未完成 / 已完成
   const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
-  const upcomingEvents = useMemo(() => {
-    const upcoming = (events || []).filter((e) => e.eventDate >= today);
-    // 報名中的賽事排最前面
-    return upcoming.sort((a, b) => {
-      const aOpen = a.registrationUrl && (!a.registrationDeadline || today <= a.registrationDeadline);
-      const bOpen = b.registrationUrl && (!b.registrationDeadline || today <= b.registrationDeadline);
-      if (aOpen && !bOpen) return -1;
-      if (!aOpen && bOpen) return 1;
-      return a.eventDate.localeCompare(b.eventDate);
-    });
-  }, [events, today]);
+  const upcomingEvents = useMemo(
+    () => (events || []).filter((e) => e.eventDate >= today),
+    [events, today]
+  );
   const completedEvents = useMemo(
     () => (events || []).filter((e) => e.eventDate < today),
     [events, today]
@@ -44,10 +37,10 @@ export function EventsPage() {
     return Array.from(years).sort((a, b) => b - a);
   }, [tabEvents]);
 
-  // 切換頁籤時重設年份
+  // 切換頁籤時預設選最大年份
   useEffect(() => {
-    setSelectedYear(null);
-  }, [activeTab]);
+    setSelectedYear(availableYears[0] ?? null);
+  }, [activeTab, availableYears]);
 
   // 依年份篩選
   const filteredEvents = useMemo(() => {
@@ -178,17 +171,6 @@ export function EventsPage() {
           {/* 年度切換按鈕 */}
           {availableYears.length > 0 && (
             <div className="flex gap-1 bg-slate-100 rounded-lg p-1 w-fit">
-              <button
-                type="button"
-                onClick={() => setSelectedYear(null)}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-colors ${
-                  selectedYear === null
-                    ? 'bg-white text-blue-700 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-700'
-                }`}
-              >
-                全部
-              </button>
               {availableYears.map((year) => (
                 <button
                   key={year}
