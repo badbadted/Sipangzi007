@@ -95,13 +95,17 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className={isPast ? 'text-slate-500' : 'text-slate-600'}>
+                    <span
+                      className={isPast && !event.locationColor ? 'text-slate-500' : 'text-slate-600'}
+                      style={event.locationColor ? { color: event.locationColor } : undefined}
+                    >
                       {event.location}
                     </span>
                   </td>
                   <td className="px-4 py-3">
                     <span
-                      className={isPast ? 'text-slate-500 font-bold' : 'font-bold text-amber-600'}
+                      className={`font-bold ${isPast && !event.nameColor ? 'text-slate-500' : !event.nameColor ? 'text-amber-600' : ''}`}
+                      style={event.nameColor ? { color: event.nameColor } : undefined}
                     >
                       {event.name}
                     </span>
@@ -171,12 +175,17 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                 </div>
                 <div className="flex items-center gap-1.5 text-sm text-slate-500">
                   <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                  <span>{event.location}</span>
+                  <span
+                    style={event.locationColor ? { color: event.locationColor } : undefined}
+                  >
+                    {event.location}
+                  </span>
                 </div>
               </div>
               {/* 第二列：賽事名稱 */}
               <p
-                className={`font-bold mb-1 ${isPast ? 'text-slate-500' : 'text-amber-600'}`}
+                className={`font-bold mb-1 ${isPast && !event.nameColor ? 'text-slate-500' : !event.nameColor ? 'text-amber-600' : ''}`}
+                style={event.nameColor ? { color: event.nameColor } : undefined}
               >
                 {event.name}
               </p>

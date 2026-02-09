@@ -7,6 +7,64 @@ import { Input } from '../common/Input';
 import { Button } from '../common/Button';
 import type { Event } from '../../types/event';
 
+// 預設色票
+const COLOR_PRESETS = [
+  { label: '預設', value: '' },
+  { label: '琥珀', value: '#d97706' },
+  { label: '紅', value: '#dc2626' },
+  { label: '玫瑰', value: '#e11d48' },
+  { label: '紫', value: '#9333ea' },
+  { label: '藍', value: '#2563eb' },
+  { label: '青', value: '#0891b2' },
+  { label: '綠', value: '#16a34a' },
+  { label: '石板', value: '#475569' },
+  { label: '黑', value: '#0f172a' },
+];
+
+function ColorPicker({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (color: string) => void;
+}) {
+  return (
+    <div>
+      <label className="block text-sm font-bold text-slate-700 mb-1">{label}</label>
+      <div className="flex flex-wrap gap-2">
+        {COLOR_PRESETS.map((preset) => (
+          <button
+            key={preset.value}
+            type="button"
+            title={preset.label}
+            onClick={() => onChange(preset.value)}
+            className={`w-7 h-7 rounded-full border-2 transition-all flex items-center justify-center ${
+              value === preset.value
+                ? 'border-blue-500 ring-2 ring-blue-200 scale-110'
+                : 'border-slate-300 hover:border-slate-400'
+            }`}
+            style={preset.value ? { backgroundColor: preset.value } : undefined}
+          >
+            {!preset.value && (
+              <span className="text-xs text-slate-400">自</span>
+            )}
+          </button>
+        ))}
+      </div>
+      {value && (
+        <div className="flex items-center gap-2 mt-1">
+          <span className="text-xs text-slate-500">預覽：</span>
+          <span className="text-sm font-bold" style={{ color: value }}>
+            範例文字
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 interface EventFormData {
   name: string;
   eventDate: string;
@@ -14,6 +72,8 @@ interface EventFormData {
   isDomestic: boolean;
   registrationUrl?: string;
   registrationDeadline?: string;
+  nameColor?: string;
+  locationColor?: string;
 }
 
 interface EventFormProps {
@@ -42,12 +102,16 @@ export function EventForm({ isOpen, onClose, onSubmit, event, loading }: EventFo
       isDomestic: true,
       registrationUrl: '',
       registrationDeadline: '',
+      nameColor: '',
+      locationColor: '',
     },
   });
 
   const eventDate = watch('eventDate');
   const isDomestic = watch('isDomestic');
   const registrationDeadline = watch('registrationDeadline');
+  const nameColor = watch('nameColor') || '';
+  const locationColor = watch('locationColor') || '';
 
   useEffect(() => {
     if (event) {
@@ -58,6 +122,8 @@ export function EventForm({ isOpen, onClose, onSubmit, event, loading }: EventFo
         isDomestic: event.isDomestic,
         registrationUrl: event.registrationUrl || '',
         registrationDeadline: event.registrationDeadline || '',
+        nameColor: event.nameColor || '',
+        locationColor: event.locationColor || '',
       });
     } else {
       reset({
@@ -67,6 +133,8 @@ export function EventForm({ isOpen, onClose, onSubmit, event, loading }: EventFo
         isDomestic: true,
         registrationUrl: '',
         registrationDeadline: '',
+        nameColor: '',
+        locationColor: '',
       });
     }
   }, [event, reset]);
@@ -191,6 +259,18 @@ export function EventForm({ isOpen, onClose, onSubmit, event, loading }: EventFo
               isClearable
             />
           </div>
+
+          <ColorPicker
+            label="賽事名稱顏色（選填）"
+            value={nameColor}
+            onChange={(c) => setValue('nameColor', c)}
+          />
+
+          <ColorPicker
+            label="地點顏色（選填）"
+            value={locationColor}
+            onChange={(c) => setValue('locationColor', c)}
+          />
 
           <div className="flex justify-end gap-3 pt-4">
             <Button type="button" variant="secondary" onClick={onClose}>

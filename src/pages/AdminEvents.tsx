@@ -46,6 +46,8 @@ export function AdminEvents() {
     isDomestic: boolean;
     registrationUrl?: string;
     registrationDeadline?: string;
+    nameColor?: string;
+    locationColor?: string;
   }) => {
     try {
       if (editingEvent) {

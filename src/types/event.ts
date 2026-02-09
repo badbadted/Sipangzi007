@@ -6,6 +6,8 @@ export interface Event {
   isDomestic: boolean;    // true=國內, false=國外
   registrationUrl?: string;       // 報名連結
   registrationDeadline?: string;  // 報名截止日 (YYYY-MM-DD)
+  nameColor?: string;             // 賽事名稱文字顏色 (hex)
+  locationColor?: string;         // 地點文字顏色 (hex)
   createdAt?: Date;
   updatedAt?: Date;
 }

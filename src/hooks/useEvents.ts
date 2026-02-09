@@ -28,6 +28,8 @@ function docToEvent(docSnapshot: { id: string; data: () => Record<string, unknow
     isDomestic: data.isDomestic as boolean,
     registrationUrl: data.registrationUrl as string | undefined,
     registrationDeadline: data.registrationDeadline as string | undefined,
+    nameColor: data.nameColor as string | undefined,
+    locationColor: data.locationColor as string | undefined,
     createdAt: data.createdAt ? (data.createdAt as Timestamp).toDate() : undefined,
     updatedAt: data.updatedAt ? (data.updatedAt as Timestamp).toDate() : undefined,
   };
