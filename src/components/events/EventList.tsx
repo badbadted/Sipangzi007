@@ -4,8 +4,12 @@ import { Badge } from '../common/Badge';
 import type { Event } from '../../types/event';
 
 // 取得報名狀態
-function getRegistrationStatus(event: Event, today: string): 'open' | 'closed' | 'none' {
-  if (!event.registrationUrl) return 'none';
+function getRegistrationStatus(event: Event, today: string): 'open' | 'closed' | 'expired' | 'none' {
+  if (!event.registrationUrl) {
+    // 沒有 URL 但有截止日且已超過 → 結束報名
+    if (event.registrationDeadline && today > event.registrationDeadline) return 'expired';
+    return 'none';
+  }
   // 無截止日則視為報名中
   if (!event.registrationDeadline) return 'open';
   return today <= event.registrationDeadline ? 'open' : 'closed';
@@ -100,8 +104,11 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                     {regStatus === 'closed' && (
                       <span className="text-sm font-bold text-red-600">報名截止</span>
                     )}
+                    {regStatus === 'expired' && (
+                      <span className="text-sm font-bold text-red-600">結束報名</span>
+                    )}
                     {regStatus === 'none' && (
-                      <span className="text-sm font-medium text-black">未開放</span>
+                      <span className="text-sm text-slate-400">未開放</span>
                     )}
                   </td>
                   <td className="px-4 py-3">
@@ -179,8 +186,11 @@ export const EventList = forwardRef<HTMLDivElement, EventListProps>(function Eve
                 {regStatus === 'closed' && (
                   <span className="text-sm font-bold text-red-600">報名截止</span>
                 )}
+                {regStatus === 'expired' && (
+                  <span className="text-sm font-bold text-red-600">結束報名</span>
+                )}
                 {regStatus === 'none' && (
-                  <span className="text-sm font-medium text-black">未開放</span>
+                  <span className="text-sm text-slate-400">未開放</span>
                 )}
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-blue-600" />
